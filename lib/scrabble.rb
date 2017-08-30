@@ -1,8 +1,7 @@
+require 'pry'
+
 class Scrabble
 
-  def score(word)
-    1
-  end
 
   def point_values
     {
@@ -14,5 +13,29 @@ class Scrabble
       "U"=>1, "V"=>4, "W"=>4, "X"=>8,
       "Y"=>4, "Z"=>10
     }
+  end
+
+  def calculate_points(word)
+    uppercase = word.upcase
+    keys = uppercase.split('')
+    keys.map {|key| point_values[key]}
+  end
+
+  def score(word)
+    points = calculate_points(word)
+    points.sum
+  end
+
+  def score_with_multipliers(word, multipliers)
+    multiplied_score = []
+
+    multipliers.each_with_index do |multiplier, index|
+      points = calculate_points(word)
+      current_letter_points = points[index]
+
+      total_points_for_letter = current_letter_points * multiplier
+      multiplied_score << total_points_for_letter
+    end
+    multiplied_score.sum
   end
 end
